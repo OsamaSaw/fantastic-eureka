@@ -106,17 +106,7 @@ const ProductsContent = () => {
       {Boolean(products) && (
         <section className="products-list">
           {pageItems.map((item: ProductType) => (
-            <ProductItem
-              id={item.id}
-              name={item.ProgramName}
-              price={item.Price}
-              key={item.id}
-              image={item.Thumb}
-              discount={item.Discount}
-              url={item.Url}
-              devices={item.Devices}
-              years={item.Years}
-            />
+            <ProductItem product={item} />
           ))}
         </section>
       )}

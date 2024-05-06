@@ -1,20 +1,15 @@
+import { addToCart } from "components/product-single/content";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { ProductTypeList } from "types";
+import { useDispatch } from "react-redux";
+import { ProductType } from "types";
 
-const ProductItem = ({
-  discount,
-  image,
-  id,
-  name,
-  price,
-  url,
-  devices,
-  years,
-}: ProductTypeList) => {
+const ProductItem = ({ product }: { product: ProductType }) => {
+  console.log(product);
   const [isHoverEnabled, setIsHoverEnabled] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
   return (
     <div
       onMouseOver={() => setIsHoverEnabled(true)}
@@ -25,7 +20,7 @@ const ProductItem = ({
         <>
           <button
             type="button"
-            onClick={() => {}}
+            onClick={() => addToCart(dispatch, product, 1)}
             className="z-40 absolute left-[50%] top-[55%] -mt-[60px] w-28 -ml-[56px] bg-[#FBB03B] text-white rounded-full p-2"
           >
             Add to cart
@@ -33,7 +28,7 @@ const ProductItem = ({
           <button
             type="button"
             onClick={() => {
-              router.push(`/product/${url}`);
+              router.push(`/product/${product?.Url}`);
             }}
             className="z-40 absolute left-[50%] top-[35%] -mt-[60px] w-28 -ml-[56px] bg-[#FBB03B] text-white rounded-full p-2"
           >
@@ -41,34 +36,37 @@ const ProductItem = ({
           </button>
         </>
       )}
-      <Link href={`/product/${url}`}>
+      <Link href={`/product/${product?.Url}`}>
         <div className="product__image">
           <img
-            src={image}
+            src={product?.Thumb}
             alt="product"
             className={`transition ease-in-out ${
               isHoverEnabled && "blur-[2px]"
             }`}
           />
-          {discount != 0 && (
-            <span className="product__discount">{discount}%</span>
+          {product?.Discount != 0 && (
+            <span className="product__discount">{product?.Discount}%</span>
           )}
         </div>
         <div className="product__description">
-          <h3>{name}</h3>
+          <h3>{product?.ProgramName}</h3>
           <span className="text-white text-sm mb-2">
-            {devices + " / " + years}
+            {product?.Devices + " / " + product?.Years}
           </span>
           <div
             className={
-              "product__price " + (discount ? "product__price--discount" : "")
+              "product__price " +
+              (product?.Discount ? "product__price--discount" : "")
             }
           >
-            <h4>{"$ " + (price - (discount ?? 0)).toFixed(2)}</h4>
+            <h4>
+              {"$ " + (product?.Price - (product?.Discount ?? 0)).toFixed(2)}
+            </h4>
 
-            {discount != 0 && (
+            {product?.Discount != 0 && (
               <del>
-                <span>${price}</span>
+                <span>${product?.Price}</span>
               </del>
             )}
           </div>
